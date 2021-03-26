@@ -115,24 +115,26 @@ namespace OOP_PROJECT
         public int box_volume;  // Қораптың көлемі. Өлшем бірлік м3
         public int box_weight;  // Қораптың салмағы
         public int box_q_ty;  //  Қораптың саны 
-        public int total;      // Барлық тауардың соңғы бағасы.
+        public int total;      // Барлық тауардың соңғы бағасы
+        public int select;    // Контейнер түрін таңдау үшін
 
 
         public int Conteiner() // Әдістің жүмысы : Егер клиент жүкті контейнерлермен жіберетін болса. Яғни жүк көлемі үлкен. (1т - 20т)
         {
+            Console.WriteLine("\nВы выбрали услугу контейнерных грузоперевозок !\n");
             string[] conteiner_type = new string[] { "20 Стандарт","40 Стандарт", "20 Высокий куб" , "40 Высокий куб" , "20 Открытый верх" , "40 Открытый верх" };
-            Console.Write("Введите количество контейнеров : ");
+            Console.Write("\nВведите количество контейнеров : "); 
             conteiner_q_ty = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Типы контейнеров : ");
+            Console.WriteLine("\nТипы контейнеров !\n");
+            int j = 1;
             for (int i=0; i < conteiner_type.Length; i++)
             {
-                int j = 1;
-                Console.WriteLine($"{j}) {conteiner_type[i]}");
-                j++;
+                Console.WriteLine($"{j}) {conteiner_type[i]}"); 
+                j=j+1;
             }
-            Console.WriteLine("Выберите тип контейнера : ");
+            Console.Write("\nВыберите тип контейнера : ");
             int select = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Введите вес контейнера : ");
+            Console.Write("\nВведите вес контейнера (1т - 20т) : ");
             conteiner_weight = Convert.ToInt32(Console.ReadLine());
 
             if (conteiner_weight < 5)   // Жүктің салмағы 5т - дан төмен болса, әр тоннаға 300$ - дан болады. 
@@ -157,11 +159,12 @@ namespace OOP_PROJECT
 
         public int Box() // Әдіс жұмысы : Егер клиент жүкті қораптар арқылы жібергісі келсе. Жүк салмағы кіші жағдай. ()
         {
-            Console.WriteLine("Введите количество коробок : ");
+            Console.WriteLine("\nВы выбрали услугу грузоперевозки через коробку !");
+            Console.Write("\nВведите количество коробок : ");
             box_q_ty = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Введите объем коробки (м3): ");
+            Console.Write("\nВведите объем коробки (м3): ");
             box_volume = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Введите вес коробки (10кг - 100кг): ");
+            Console.Write("\nВведите вес коробки (10кг - 100кг): ");
             box_weight = Convert.ToInt32(Console.ReadLine());
 
             if(box_weight>10 && box_weight < 50)   // Жүктің салмағы 10кг мен 50кг аралығы болса, ір кг-ға 10$ болады.
@@ -189,7 +192,6 @@ namespace OOP_PROJECT
            көп шығынға ұшырайды.
         */
 
-
         public double total_back;
 
         public double ClientTotal()
@@ -197,11 +199,13 @@ namespace OOP_PROJECT
             return total_back = base.total - base.total * 0.1;
         }
     }
-    class Program
+    class Program 
     {
         static void Main(string[] args)
         {
-         
+
+            Freight f = new Freight();
+            Order_back o = new Order_back();
 
             List<Contact_information> client = new List<Contact_information>();
 
@@ -219,13 +223,71 @@ namespace OOP_PROJECT
             air_route.Add(new Marshrut(4, "B 737-400", "England", "Turkey", new DateTime(2021, 05, 28, 23, 50, 00), new DateTime(2021, 05, 01, 01, 20, 00)));
             air_route.Add(new Marshrut(5, "MD 11", "Japan", "Germany", new DateTime(2021, 06, 27, 12, 45, 00), new DateTime(2021, 06, 27, 13, 30, 00)));
 
-            Console.WriteLine();
-
-
-            foreach (var s in air_route)
+            Console.WriteLine("Добро пожаловать в наш отдел грузоперевозок !!! ");
+            Line();
+            bool tr = true;
+            while (tr)
             {
-                s.Show();
+                Console.WriteLine("Нажмите 1, Если вы хотите воспользоваться услугой грузоперевозок.\nНажмите 2, Если вы хотите вернуть свой заказ.\nНажмите 3, Если вы хотите прекратить обслуживание.\n");
+                int tanda = Convert.ToInt32(Console.ReadLine());
+
+                if (tanda == 1 || tanda == 2 || tanda == 3)
+                {
+                    switch (tanda)
+                    {
+                        case 1:
+                            Console.WriteLine("\nНиже приведены маршруты грузоперевозок нашей компании.\n");
+                            Line();
+                            foreach (var s in air_route)
+                            {
+                                s.Show();
+                            }
+                            Console.WriteLine("\nВыберите нужный вам маршрут грузоперевозки. \n");
+                            int selectM = Convert.ToInt32(Console.ReadLine());
+                            bool t = true;
+                            while (t)
+                            {
+                                Console.WriteLine("\nКакой вид грузоперевозок вы хотите использовать. Наша компания предлагает :" +
+                                    "\n 1) Услуги по перевозке грузов через Контейнер. Вес груза: от 1т до 20т. " +
+                                    "\n 2) Услуги по перевозке грузов через коробку. Вес груза: от 10кг до 100кг.\n");
+
+                                int selectF = Convert.ToInt32(Console.ReadLine());
+                                if (selectF == 1) { f.Conteiner(); t=false; }
+                                else if (selectF == 2) { f.Box(); t = false; }
+                                else { Console.WriteLine($"\nВы ввели ошибку (такого выбора нет : {selectF}). Введите снова !\n"); }
+                            }
+
+                            break;
+
+                        case 2:
+
+                            if (f.total == 0) { Console.WriteLine("\nВы не воспользовались услугами нашей компании !\n"); }
+                            else
+                            {
+                                Console.WriteLine("Напоминаем, что при отзыве заказа 10% от оплаченных средств остается на услуги нашей компании.");
+                                Console.WriteLine($"Ваши деньги, оплаченные за полный заказ : {f.total}" +
+                                    $"10% уплаченных денег комиссии банка : {f.total * 0.1}" +
+                                    $"Возвращенные вам деньги : {o.total_back}");
+
+                                Console.WriteLine("Большое спасибо, что выбрали нас !");
+                            }
+                            break;
+
+                        case 3:
+
+                            Console.WriteLine("\nБольшое спасибо, что выбрали нас !\n");
+
+                            break;
+                    }
+
+                    tr = false;
+                }
+
+                else { Console.WriteLine($"\nВы ввели ошибку (такого выбора нет : {tanda}). Введите снова !\n"); }
             }
+
+
+          
 
 
 
@@ -238,6 +300,16 @@ namespace OOP_PROJECT
 
             //else { Console.WriteLine("False"); }
 
+        }
+
+        static void Line()
+        {
+            for (int i=0;i<60;i++)
+            {
+                Console.Write('-');
+            }
+
+            Console.WriteLine();
         }
     }
 }
