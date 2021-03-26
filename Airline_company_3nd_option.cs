@@ -115,7 +115,7 @@ namespace OOP_PROJECT
         public int box_volume;  // Қораптың көлемі. Өлшем бірлік м3
         public int box_weight;  // Қораптың салмағы
         public int box_q_ty;  //  Қораптың саны 
-        public int total;      // Барлық тауардың соңғы бағасы
+        public int total=2000;      // Барлық тауардың соңғы бағасы
         public int select;    // Контейнер түрін таңдау үшін
 
 
@@ -167,11 +167,11 @@ namespace OOP_PROJECT
             Console.Write("\nВведите вес коробки (10кг - 100кг): ");
             box_weight = Convert.ToInt32(Console.ReadLine());
 
-            if(box_weight>10 && box_weight < 50)   // Жүктің салмағы 10кг мен 50кг аралығы болса, ір кг-ға 10$ болады.
+            if(box_weight>10 && box_weight < 50)   // Жүктің салмағы 10кг мен 50кг аралығы болса, әр кг-ға 10$ болады.
             {
                 return total = box_q_ty * box_weight * 10;
             }
-            else if (box_weight > 50 && box_weight < 100)  // Жүктің салмағы 50кг мен 100кг аралығы болса, ір кг-ға 30$ болады.
+            else if (box_weight > 50 && box_weight < 100)  // Жүктің салмағы 50кг мен 100кг аралығы болса, әр кг-ға 30$ болады.
             {
                 return total = box_q_ty * box_weight * 30;
             }
@@ -264,10 +264,10 @@ namespace OOP_PROJECT
                             if (f.total == 0) { Console.WriteLine("\nВы не воспользовались услугами нашей компании !\n"); }
                             else
                             {
-                                Console.WriteLine("Напоминаем, что при отзыве заказа 10% от оплаченных средств остается на услуги нашей компании.");
-                                Console.WriteLine($"Ваши деньги, оплаченные за полный заказ : {f.total}" +
-                                    $"10% уплаченных денег комиссии банка : {f.total * 0.1}" +
-                                    $"Возвращенные вам деньги : {o.total_back}");
+                                Console.WriteLine("\nНапоминаем, что при отзыве заказа 10% от оплаченных средств остается на услуги нашей компании.");
+                                Console.WriteLine($"\nВаши деньги, оплаченные за полный заказ : {f.total}$" +
+                                    $"\n10% уплаченных денег комиссии банка : {f.total * 0.1}$" +
+                                    $"\nВозвращенные вам деньги : {o.ClientTotal()}$\n");
 
                                 Console.WriteLine("Большое спасибо, что выбрали нас !");
                             }
