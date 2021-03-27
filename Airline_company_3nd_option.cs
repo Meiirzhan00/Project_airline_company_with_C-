@@ -15,11 +15,11 @@ namespace OOP_PROJECT
 
         public Contact_information()    // Бос конструктор
         {
-            Console.Write("Company : ");
+            Console.Write("\nCompany : ");
             this.company = Console.ReadLine();
-            Console.Write("Name : ");
+            Console.Write("\nName : ");
             this.name = Console.ReadLine();
-            Console.Write("Country: ");
+            Console.Write("\nCountry: ");
             this.country = Console.ReadLine();
             this.phone_number = Phone_tekseru();
             this.email = Email_tekseru();
@@ -40,7 +40,7 @@ namespace OOP_PROJECT
             bool tekseru = true;
             while (tekseru)
             {
-                Console.WriteLine("Пожалуйста, укажите свой номер телефона в формате: +7 707 777 77 77\nБез пробелов");
+                Console.WriteLine("Пожалуйста, укажите свой номер телефона в формате: +7 707 777 77 77\nБез пробелов\n");
                 phone_number = Console.ReadLine();
                 if (phone_number.Length == 12)
                 {
@@ -61,7 +61,7 @@ namespace OOP_PROJECT
             while (tekseru)
             {
 
-                Console.WriteLine("Пожалуйста, напишите свой почту (! gmail.com ) : ");
+                Console.Write("\nПожалуйста, напишите свой почту (! gmail.com ) : ");
                 email = Console.ReadLine();
                 string gmail_com = email.Substring(email.Length - 10); // Мұнда клиенттің почтасын тексеремін. Почтаның ұзындығынан 10-ды алған себебім, @gmail.com
                 if (gmail_com == "@gmail.com")                         // ұзындығы 10-ға тең. Сол арқылы почта ұзындығынан @gmail.com деген бөлікті алып, тексеремін.
@@ -79,6 +79,11 @@ namespace OOP_PROJECT
             return email;
         }
 
+        public void Shygaru()
+        {
+            Console.WriteLine($"Компания : {company}  Имя : {name}  Email : {email}");
+        }
+
     }
 
     class Marshrut  // Класс жұмысы:  маршруттардың бағыты, ұшу-қону уақыты, самолетті таңдау мүмкіндігі қарастырылған. 
@@ -90,6 +95,7 @@ namespace OOP_PROJECT
         public DateTime source_time;   // Жүкті тасымалдау басталатын уақыт
         public DateTime destination_time;  // Жүк жеткізілетін уақыт
 
+        public Marshrut() { }
         public Marshrut(int id_air, string aircraft, string source_port,string destination_port, DateTime source_time, DateTime destination_time)
         {
             this.id_air = id_air;
@@ -104,6 +110,11 @@ namespace OOP_PROJECT
         {
             Console.WriteLine($"{id_air}) Тип самолета: {aircraft} , {source_port} ---> {destination_port} , Время вылета: {source_time} , Время посадки: {destination_time} \n");
         }
+
+        public void Marshrut_info()
+        {
+            Console.WriteLine($"{source_port} --> {destination_port}  Вылет из : {source_time} Пребытие : {destination_time}");
+        }
     }
 
     class Freight  // Бұл класста қандай затты жөнелту керек және оны бағасы туралы ақпарат. Жалпы грузға байланысты класс.
@@ -115,9 +126,8 @@ namespace OOP_PROJECT
         public int box_volume;  // Қораптың көлемі. Өлшем бірлік м3
         public int box_weight;  // Қораптың салмағы
         public int box_q_ty;  //  Қораптың саны 
-        public int total=2000;      // Барлық тауардың соңғы бағасы
+        public int total;      // Барлық тауардың соңғы бағасы
         public int select;    // Контейнер түрін таңдау үшін
-
 
         public int Conteiner() // Әдістің жүмысы : Егер клиент жүкті контейнерлермен жіберетін болса. Яғни жүк көлемі үлкен. (1т - 20т)
         {
@@ -154,7 +164,6 @@ namespace OOP_PROJECT
                 return total = conteiner_q_ty * conteiner_weight;
             }
 
-
         }
 
         public int Box() // Әдіс жұмысы : Егер клиент жүкті қораптар арқылы жібергісі келсе. Жүк салмағы кіші жағдай. ()
@@ -182,21 +191,31 @@ namespace OOP_PROJECT
             
         }
 
+        public void Conteiner_info()
+        {
+            Console.WriteLine($"Количество : {conteiner_q_ty}  Вес : {conteiner_weight}т");
+        }
+
+        public void Box_info()
+        {
+            Console.WriteLine($"Количество : {box_q_ty}  Вес : {box_weight}кг");
+        }
 
     }
 
-    class Order_back : Freight  // Класс жұмысы : Клиент берген тапсырысын қайтарып алу қызметі. 
+    class Order_back  // Класс жұмысы : Клиент берген тапсырысын қайтарып алу қызметі. 
     {
         /* Егер клиент берген тапсырысын қайтарып алғысы келсе. Авиокомпания оның толық тапсырысқа кеткен
            ақшасының 10%-ын алып қалады. Себебі компания талабы солай болады. Егер клиент көп жүк тиеген болса
            көп шығынға ұшырайды.
         */
 
+        Freight fr = new Freight();
         public double total_back;
 
         public double ClientTotal()
         {
-            return total_back = base.total - base.total * 0.1;
+            return total_back = fr.total - fr.total * 0.1;
         }
     }
     class Program 
@@ -204,8 +223,11 @@ namespace OOP_PROJECT
         static void Main(string[] args)
         {
 
+
             Freight f = new Freight();
             Order_back o = new Order_back();
+            Marshrut m = new Marshrut();
+
 
             List<Contact_information> client = new List<Contact_information>();
 
@@ -220,10 +242,14 @@ namespace OOP_PROJECT
             air_route.Add(new Marshrut(1, "AN 12", "Spain", "USA", new DateTime(2021, 03, 26, 17, 45, 00), new DateTime(2021, 03, 26, 20, 30, 00)));
             air_route.Add(new Marshrut(2, "IL – 76", "Kazakhstan", "Brazil", new DateTime(2021, 04, 10, 12, 53, 00), new DateTime(2021, 04, 30, 16, 10, 00)));
             air_route.Add(new Marshrut(3, "AN 124", "France", "China", new DateTime(2021, 04, 06, 20, 05, 00), new DateTime(2021, 04, 07, 03, 55, 00)));
-            air_route.Add(new Marshrut(4, "B 737-400", "England", "Turkey", new DateTime(2021, 05, 28, 23, 50, 00), new DateTime(2021, 05, 01, 01, 20, 00)));
+            air_route.Add(new Marshrut(4, "B 737-400", "England", "Turkey", new DateTime(2021, 05, 28, 23, 50, 00), new DateTime(2021, 05, 28, 01, 20, 00)));
             air_route.Add(new Marshrut(5, "MD 11", "Japan", "Germany", new DateTime(2021, 06, 27, 12, 45, 00), new DateTime(2021, 06, 27, 13, 30, 00)));
 
-            Console.WriteLine("Добро пожаловать в наш отдел грузоперевозок !!! ");
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\t\tАвиакомпания СИБ 18-2А\n");
+            Console.ResetColor();
+            Console.WriteLine("Добро пожаловать в наш отдел грузоперевозок !!!");
             Line();
             bool tr = true;
             while (tr)
@@ -252,13 +278,90 @@ namespace OOP_PROJECT
                                     "\n 2) Услуги по перевозке грузов через коробку. Вес груза: от 10кг до 100кг.\n");
 
                                 int selectF = Convert.ToInt32(Console.ReadLine());
-                                if (selectF == 1) { f.Conteiner(); t=false; }
-                                else if (selectF == 2) { f.Box(); t = false; }
+                                if (selectF == 1) 
+                                {
+                                    f.Conteiner();
+                                    client.Add(new Contact_information());
+                                    Console.WriteLine();
+                                    Line();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("ПОДТВЕРЖДЕНИЕ БРОНИРОВАНИЯ !");
+                                    Console.ResetColor();
+                                    Line();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Заказчик");
+                                    Console.ResetColor();
+                                    client[5].Shygaru();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nИнформация о грузе. (Контейнер)");
+                                    Console.ResetColor();
+                                    f.Conteiner_info();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nМаршрут.");
+                                    Console.ResetColor();
+                                    air_route[selectM-1].Marshrut_info();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nОплата заказа.");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"{f.total}$");
+                                    Line();
+                                    Console.WriteLine("Если вы подтвердите нажмите 1, если нет нажмите 2.\n");
+                                    int selectP = Convert.ToInt32(Console.ReadLine());
+                                    if (selectP == 1)
+                                    {
+                                        Console.WriteLine("\nСлужба выполнена успешно. Спасибо за доверие к нашей компании !");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nБольшое спасибо, что выбрали нас !");
+                                    }
+                                    t = false;
+                                }
+                                else if (selectF == 2)
+                                {
+                                    f.Box();
+                                    client.Add(new Contact_information());
+                                    Console.WriteLine();
+                                    Line();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("ПОДТВЕРЖДЕНИЕ БРОНИРОВАНИЯ !");
+                                    Console.ResetColor();
+                                    Line();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("Заказчик");
+                                    Console.ResetColor();
+                                    client[5].Shygaru();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nИнформация о грузе. (Коробка)");
+                                    Console.ResetColor();
+                                    f.Box_info();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nМаршрут.");
+                                    Console.ResetColor();
+                                    air_route[selectM-1].Marshrut_info();
+                                    Console.ForegroundColor = ConsoleColor.Red;
+                                    Console.WriteLine("\nОплата заказа.");
+                                    Console.ResetColor();
+                                    Console.WriteLine($"{f.total}$");
+                                    Line();
+                                    Console.WriteLine("Если вы подтвердите нажмите 1, если нет нажмите 2.\n");
+                                    int selectP = Convert.ToInt32(Console.ReadLine());
+                                    if (selectP == 1)
+                                    {
+                                        Console.WriteLine("\nСлужба выполнена успешно. Спасибо за доверие к нашей компании !");
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nБольшое спасибо, что выбрали нас !");
+                                    }
+
+                                    t = false;
+                                }
                                 else { Console.WriteLine($"\nВы ввели ошибку (такого выбора нет : {selectF}). Введите снова !\n"); }
                             }
 
                             break;
-
+                             
                         case 2:
 
                             if (f.total == 0) { Console.WriteLine("\nВы не воспользовались услугами нашей компании !\n"); }
@@ -286,25 +389,10 @@ namespace OOP_PROJECT
                 else { Console.WriteLine($"\nВы ввели ошибку (такого выбора нет : {tanda}). Введите снова !\n"); }
             }
 
-
-          
-
-
-
-
-
-            //Console.Write("Пожалуйста, напишите свой почту (! gmail.com ) : ");
-            //string email = Console.ReadLine();
-            //string gmail_com = email.Substring(email.Length - 10);
-            //if (gmail_com == "@gmail.com") { Console.WriteLine("True"); }
-
-            //else { Console.WriteLine("False"); }
-
         }
-
         static void Line()
         {
-            for (int i=0;i<60;i++)
+            for (int i=0;i<80;i++)
             {
                 Console.Write('-');
             }
@@ -313,4 +401,3 @@ namespace OOP_PROJECT
         }
     }
 }
- 
